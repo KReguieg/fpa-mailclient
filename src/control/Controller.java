@@ -43,9 +43,4 @@ public class Controller {
         }
 
     }
-
-    @FXML
-    public void onExitAbout(){
-        System.exit(0);
-    }
 }
