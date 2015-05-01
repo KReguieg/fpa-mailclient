@@ -3,13 +3,19 @@ package control;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import model.Message;
 import model.MessageImportance;
 import model.MessageStakeholder;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Created by Khaled_000 on 14.04.2015.
@@ -40,6 +46,8 @@ public class ContentController {
     @FXML
     private TableColumn<Message, String> subjectColoumnId;
 
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+
     public void initialize() {
         System.out.println("Initialize Controller...");
         createExampleMessages();
@@ -50,8 +58,54 @@ public class ContentController {
 
     public void loadTableItems() {
         priorityColoumnId.setCellValueFactory(cellData -> cellData.getValue().importanceOfMessageProperty());
+        priorityColoumnId.setCellFactory(cellData -> new TableCell<Message, MessageImportance>() {
+            @Override
+            protected void updateItem(MessageImportance item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    ImageView priorityIconView = null;
+                    if (item == MessageImportance.HIGH) {
+                        priorityIconView = new ImageView(new Image("res/ic_call_made_black_18dp.png"));
+                    } else if (item == MessageImportance.NORMAL) {
+                        priorityIconView = new ImageView(new Image("res/ic_remove_black_18dp.png"));
+                    } else if (item == MessageImportance.LOW) {
+                        priorityIconView = new ImageView(new Image("res/ic_call_received_black_18dp.png"));
+                    }
+                    setGraphic(priorityIconView);
+                }
+            }
+        });
         receivedColoumnId.setCellValueFactory(cellData -> cellData.getValue().receivedAtProperty());
+        receivedColoumnId.setCellFactory(cellData -> new TableCell<Message, LocalDateTime>() {
+            @Override
+            protected void updateItem(LocalDateTime item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                }
+                else setText(formatter.format(item));
+            }
+        });
         readColoumnId.setCellValueFactory(cellData -> cellData.getValue().readStatusProperty());
+        readColoumnId.setCellFactory(cellData -> new TableCell<Message, Boolean>() {
+            @Override
+            protected void updateItem(Boolean item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    ImageView messageReadImageView = null;
+                    if(item) messageReadImageView = new ImageView(new Image("res/ic_drafts_black_18dp.png"));
+                    else messageReadImageView = new ImageView((new Image("res/ic_mail_black_18dp.png")));
+                    setGraphic(messageReadImageView);
+                }
+            }
+        });
         senderColoumnId.setCellValueFactory(cellData -> cellData.getValue().senderProperty().get().nameProperty());
         subjectColoumnId.setCellValueFactory(cellData -> cellData.getValue().subjectProperty());
     }
@@ -65,6 +119,8 @@ public class ContentController {
         m1.setId("1");
         m1.setImportanceOfMessage(MessageImportance.LOW);
         m1.setReadStatus(true);
+        System.out.println(ZoneId.systemDefault());
+        System.out.println(Clock.system(ZoneId.systemDefault()));
         m1.setReceivedAt(LocalDateTime.now());
         m1.setSubject("Omg Zeig das an!");
         m1.setText("BLABLABLABLA");

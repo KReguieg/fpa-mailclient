@@ -18,11 +18,11 @@ public class Main extends Application {
         root = FXMLLoader.load(getClass().getResource("../view/root.fxml"));
         primaryStage.setTitle("PaperJets");
         primaryStage.getIcons().add(new Image("res/ic_send_black_48dp.png"));
-        primaryStage.setScene(new Scene(root, 1000, 600));
+        primaryStage.setScene(new Scene(root, 800, 500));
         AnchorPane treeMenu = FXMLLoader.load(getClass().getResource("../view/nav.fxml"));
         root.setLeft(treeMenu);
         SplitPane contentWindow = FXMLLoader.load(getClass().getResource("../view/content.fxml"));
-        root.setCenter(contentWindow);
+        root.setRight(contentWindow);
         primaryStage.show();
     }
 

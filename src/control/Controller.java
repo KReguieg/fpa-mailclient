@@ -4,8 +4,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -39,6 +37,9 @@ public class Controller {
             aboutWindow.setTitle("About PaperJets");
             aboutWindow.setScene(new Scene(root, 300, 250));
             aboutWindow.getIcons().add(new Image("res/ic_send_black_48dp.png"));
+           // aboutWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Already there
+           // aboutWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
+           // aboutWindow.setUndecorated(true);
             aboutWindow.show();
         } catch (IOException e) {
             e.printStackTrace();
