@@ -12,6 +12,10 @@ import model.Message;
 import model.MessageImportance;
 import model.MessageStakeholder;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -86,8 +90,7 @@ public class ContentController {
                 if (item == null || empty) {
                     setText(null);
                     setStyle("");
-                }
-                else setText(formatter.format(item));
+                } else setText(formatter.format(item));
             }
         });
         readColoumnId.setCellValueFactory(cellData -> cellData.getValue().readStatusProperty());
@@ -100,7 +103,7 @@ public class ContentController {
                     setStyle("");
                 } else {
                     ImageView messageReadImageView = null;
-                    if(item) messageReadImageView = new ImageView(new Image("res/ic_drafts_black_18dp.png"));
+                    if (item) messageReadImageView = new ImageView(new Image("res/ic_drafts_black_18dp.png"));
                     else messageReadImageView = new ImageView((new Image("res/ic_mail_black_18dp.png")));
                     setGraphic(messageReadImageView);
                 }
@@ -150,16 +153,39 @@ public class ContentController {
         messageData.add(m2);
     }
 
-    /**
-     * This method calls ALL createExampleMessage methods
-     */
+    public File[] loadFiles() {
+        final String extension = ".xml";
+        final File currentDir = new File(".\\src\\mes");
+        File[] files = currentDir.listFiles((File pathname) -> pathname.getName().endsWith(extension));
+        return files;
+    }
+
     public void createExampleMessages() {
-        createExampleMessage1();
-        createExampleMessage2();
+        File[] files = loadFiles();
+        for (File file : files) {
+            try {
+                JAXBContext jaxbContext = JAXBContext.newInstance(Message.class);
+                Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+                Message msg = (Message) jaxbUnmarshaller.unmarshal(file);
+                messageData.add(msg);
+            } catch (JAXBException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
+     * This method calls ALL createExampleMessage methods
+
+     public void createExampleMessages() {
+     createExampleMessage1();
+     createExampleMessage2();
+     }
+     */
+
+    /**
      * Returns the observableList object
+     *
      * @return ObservableList<Message>
      */
     public ObservableList<Message> getMessageData() {

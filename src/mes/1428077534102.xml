@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<message>
+    <id>1428077534102</id>
+    <importanceOfMessage>LOW</importanceOfMessage>
+    <readStatus>false</readStatus>
+    <receivedAt>2014-05-17T09:02</receivedAt>
+    <recipients>
+        <recipient>
+            <mailAddress>info@ing-diba.de</mailAddress>
+            <name>ING-DiBa</name>
+        </recipient>
+        <recipient>
+            <mailAddress>s12345@beuth-hochschule.de</mailAddress>
+            <name>John Doe</name>
+        </recipient>
+    </recipients>
+    <sender>
+        <mailAddress>trainingDE@trifork.com</mailAddress>
+        <name>GOTO Academy DE</name>
+    </sender>
+    <subject>Workshops: Docker &amp; Microservices - GOTO Academy Germany</subject>
+    <text>Neuer Workshop verfügbar</text>
+</message>

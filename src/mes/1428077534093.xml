@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<message>
+    <id>1428077534093</id>
+    <importanceOfMessage>HIGH</importanceOfMessage>
+    <readStatus>false</readStatus>
+    <receivedAt>2014-08-28T18:16</receivedAt>
+    <recipients>
+        <recipient>
+            <mailAddress>info@otto-office.de</mailAddress>
+            <name>Kundenservice</name>
+        </recipient>
+    </recipients>
+    <sender>
+        <mailAddress>s12345@beuth-hochschule.de</mailAddress>
+        <name>John Doe</name>
+    </sender>
+    <subject>XING-Profil</subject>
+    <text>Der Typ in Sieben heißt ja wie ich?!?</text>
+</message>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<message>
+    <id>1428077534088</id>
+    <importanceOfMessage>NORMAL</importanceOfMessage>
+    <readStatus>false</readStatus>
+    <receivedAt>2014-02-02T14:10</receivedAt>
+    <recipients>
+        <recipient>
+            <mailAddress>info@otto-office.de</mailAddress>
+            <name>Kundenservice</name>
+        </recipient>
+        <recipient>
+            <mailAddress>trainingDE@trifork.com</mailAddress>
+            <name>GOTO Academy DE</name>
+        </recipient>
+    </recipients>
+    <sender>
+        <mailAddress>info@meetup.com</mailAddress>
+        <name>Support</name>
+    </sender>
+    <subject>Teilnahme an Veranstaltung</subject>
+    <text>Die Gruppe richtet sich an alle Unternehmer, die selbst ein SaaS Unternehmen besitzen, oder in einem SaaS Unternehmen arbeiten.</text>
+</message>

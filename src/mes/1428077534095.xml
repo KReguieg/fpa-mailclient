@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<message>
+    <id>1428077534095</id>
+    <importanceOfMessage>NORMAL</importanceOfMessage>
+    <readStatus>false</readStatus>
+    <receivedAt>2014-10-16T04:37</receivedAt>
+    <recipients>
+        <recipient>
+            <mailAddress>info@otto-office.de</mailAddress>
+            <name>Kundenservice</name>
+        </recipient>
+        <recipient>
+            <mailAddress>info@ing-diba.de</mailAddress>
+            <name>ING-DiBa</name>
+        </recipient>
+    </recipients>
+    <sender>
+        <mailAddress>info@mailer.netflix.com</mailAddress>
+        <name>Netflix</name>
+    </sender>
+    <subject>Coming Friday, April 10th… Marvel’s Daredevil</subject>
+    <text>Der Film gefällt dir vielleicht.</text>
+</message>
