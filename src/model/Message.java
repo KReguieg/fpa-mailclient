@@ -2,6 +2,8 @@ package model;
 
 import javafx.beans.property.*;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDateTime;
@@ -115,6 +117,8 @@ public class Message {
         return this.text.get();
     }
 
+    @XmlElementWrapper
+    @XmlElement(name = "recipient")
     public List<MessageStakeholder> getRecipients() {
         return recipients;
     }

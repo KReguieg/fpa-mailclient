@@ -1,11 +1,12 @@
 package control;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import model.Message;
@@ -16,13 +17,14 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
-import java.time.Clock;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Created by Khaled_000 on 14.04.2015.
+ * Created by Ibrahim Khaled Reguieg,
+ * Khaled.Reguieg@gmail.com,
+ * https://www.github.com/KReguieg
+ * on 14.04.2015.
  */
 public class ContentController {
 
@@ -50,14 +52,59 @@ public class ContentController {
     @FXML
     private TableColumn<Message, String> subjectColoumnId;
 
+    @FXML
+    private Label recipientsLbl;
+
+    @FXML
+    private Label subjectLbl;
+
+    @FXML
+    private Label dateLbl;
+
+    @FXML
+    private Label fromLbl;
+
+    @FXML
+    private TextArea mailContentTextArea;
+
+    @FXML
+    private MenuItem markAsUnreadContextMenu;
+
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     public void initialize() {
         System.out.println("Initialize Controller...");
         createExampleMessages();
         loadTableItems();
+        setOnClickListeners();
         tableViewId.setItems(getMessageData());
         System.out.println("Controller initialized...");
+    }
+
+
+    @FXML
+    void markMessageAsUnread(ActionEvent event) {
+        if(tableViewId.getSelectionModel().getSelectedItem() != null) {
+            tableViewId.getSelectionModel().getSelectedItem().setReadStatus(false);
+        }
+    }
+
+    public void setOnClickListeners() {
+        tableViewId.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Message>() {
+            @Override
+            public void changed(ObservableValue<? extends Message> observable, Message oldValue, Message newValue) {
+                String recipients = "";
+                for (MessageStakeholder recipient : newValue.getRecipients()) {
+                    recipients += recipient.getName() + " <\"" + recipient.getMailAddress() + "\">, ";
+                }
+                recipientsLbl.setText(recipients);
+                fromLbl.setText(newValue.getSender().getName() + " <\"" + newValue.getSender().getMailAddress() + "\">");
+                subjectLbl.setText(newValue.getSubject());
+                dateLbl.setText(DateTimeFormatter.ofPattern("dd.MM.yyyy").format(newValue.getReceivedAt()));
+                mailContentTextArea.setText(newValue.getText());
+                newValue.setReadStatus(true);
+            }
+        });
     }
 
     public void loadTableItems() {
@@ -102,7 +149,7 @@ public class ContentController {
                     setText(null);
                     setStyle("");
                 } else {
-                    ImageView messageReadImageView = null;
+                    ImageView messageReadImageView;
                     if (item) messageReadImageView = new ImageView(new Image("res/ic_drafts_black_18dp.png"));
                     else messageReadImageView = new ImageView((new Image("res/ic_mail_black_18dp.png")));
                     setGraphic(messageReadImageView);
@@ -114,52 +161,19 @@ public class ContentController {
     }
 
     /**
-     * This method creates the 1st example Message, by setting the values
-     * of the message instance over the setter methods
+     * Returns all .xml files from the given path as an Array filled with files.
+     *
+     * @return File[]
      */
-    public void createExampleMessage1() {
-        Message m1 = new Message();
-        m1.setId("1");
-        m1.setImportanceOfMessage(MessageImportance.LOW);
-        m1.setReadStatus(true);
-        System.out.println(ZoneId.systemDefault());
-        System.out.println(Clock.system(ZoneId.systemDefault()));
-        m1.setReceivedAt(LocalDateTime.now());
-        m1.setSubject("Omg Zeig das an!");
-        m1.setText("BLABLABLABLA");
-        MessageStakeholder ms1 = new MessageStakeholder();
-        ms1.setName("Khaled Reguieg");
-        ms1.setMailAddress("Khaled.Reguieg@gmail.com");
-        m1.setSender(ms1);
-        messageData.add(m1);
-    }
-
-    /**
-     * This method creates the 2nd example Message, by setting the values
-     * of the message instance over the setter methods
-     */
-    public void createExampleMessage2() {
-        Message m2 = new Message();
-        m2.setId("2");
-        m2.setImportanceOfMessage(MessageImportance.HIGH);
-        m2.setReadStatus(true);
-        m2.setReceivedAt(LocalDateTime.now());
-        m2.setSubject("Omg Zeig das an!");
-        m2.setText("YAAAAAAAAAAAAAAAAAAAAAAAAY");
-        MessageStakeholder ms1 = new MessageStakeholder();
-        ms1.setName("Khaled Reguieg");
-        ms1.setMailAddress("Khaled.Reguieg@gmail.com");
-        m2.setSender(ms1);
-        messageData.add(m2);
-    }
-
     public File[] loadFiles() {
         final String extension = ".xml";
         final File currentDir = new File(".\\src\\mes");
-        File[] files = currentDir.listFiles((File pathname) -> pathname.getName().endsWith(extension));
-        return files;
+        return currentDir.listFiles((File pathname) -> pathname.getName().endsWith(extension));
     }
 
+    /**
+     * This method creates Message objects out of XML-files.
+     */
     public void createExampleMessages() {
         File[] files = loadFiles();
         for (File file : files) {
@@ -173,15 +187,6 @@ public class ContentController {
             }
         }
     }
-
-    /**
-     * This method calls ALL createExampleMessage methods
-
-     public void createExampleMessages() {
-     createExampleMessage1();
-     createExampleMessage2();
-     }
-     */
 
     /**
      * Returns the observableList object
