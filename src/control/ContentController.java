@@ -15,6 +15,7 @@ import model.MessageStakeholder;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.time.LocalDateTime;
@@ -86,6 +87,11 @@ public class ContentController {
     void markMessageAsUnread(ActionEvent event) {
         if(tableViewId.getSelectionModel().getSelectedItem() != null) {
             tableViewId.getSelectionModel().getSelectedItem().setReadStatus(false);
+            try {
+                saveMessage(tableViewId.getSelectionModel().getSelectedItem());
+            } catch (JAXBException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -186,6 +192,14 @@ public class ContentController {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void saveMessage(Message msg) throws JAXBException{
+        final File currentDir = new File(".\\src\\mes");
+        JAXBContext context = JAXBContext.newInstance(Message.class);
+        Marshaller m = context.createMarshaller();
+        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        m.marshal(msg, new File(currentDir.getAbsolutePath() + "\\" + msg.getId() + ".xml"));
     }
 
     /**
