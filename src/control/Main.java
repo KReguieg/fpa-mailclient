@@ -26,21 +26,6 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-//    public void showMessageOverview() {
-//        try {
-//            FXMLLoader loader = new FXMLLoader();
-//            loader.setLocation(Main.class.getResource("../view/content.fxml"));
-//            AnchorPane messageOverview = (AnchorPane) loader.load();
-//
-//            root.setCenter(messageOverview);
-//
-//            ContentController controller = loader.getController();
-//            controller.setMain(this);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     public static void main(String[] args) {
         launch(args);
     }

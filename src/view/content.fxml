@@ -8,11 +8,11 @@
          <children>
             <TableView fx:id="tableViewId" layoutX="-1.0" layoutY="-2.0" prefHeight="246.0" prefWidth="600.0">
               <columns>
-                <TableColumn fx:id="priorityColoumnId" prefWidth="72.0" text="Priority" />
-                <TableColumn fx:id="receivedColoumnId" prefWidth="106.0" text="Received" />
-                  <TableColumn fx:id="readColoumnId" prefWidth="89.0" text="Read" />
-                  <TableColumn fx:id="senderColoumnId" prefWidth="128.0" text="Sender" />
-                  <TableColumn fx:id="subjectColoumnId" prefWidth="202.0" text="Subject" />
+                <TableColumn fx:id="priorityColoumnId" prefWidth="50.0" text="Priority" />
+                <TableColumn fx:id="receivedColoumnId" prefWidth="91.0" text="Received" />
+                  <TableColumn fx:id="readColoumnId" prefWidth="39.0" text="Read" />
+                  <TableColumn fx:id="senderColoumnId" prefWidth="186.0" text="Sender" />
+                  <TableColumn fx:id="subjectColoumnId" prefWidth="233.0" text="Subject" />
               </columns>
                <contextMenu>
                   <ContextMenu fx:id="m">

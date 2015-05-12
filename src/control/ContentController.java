@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -109,6 +110,11 @@ public class ContentController {
                 dateLbl.setText(DateTimeFormatter.ofPattern("dd.MM.yyyy").format(newValue.getReceivedAt()));
                 mailContentTextArea.setText(newValue.getText());
                 newValue.setReadStatus(true);
+                try {
+                    saveMessage(tableViewId.getSelectionModel().getSelectedItem());
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -132,6 +138,9 @@ public class ContentController {
                         priorityIconView = new ImageView(new Image("res/ic_call_received_black_18dp.png"));
                     }
                     setGraphic(priorityIconView);
+                    priorityIconView.setFitHeight(15);
+                    priorityIconView.setFitWidth(15);
+                    setAlignment(Pos.CENTER);
                 }
             }
         });
@@ -159,6 +168,9 @@ public class ContentController {
                     if (item) messageReadImageView = new ImageView(new Image("res/ic_drafts_black_18dp.png"));
                     else messageReadImageView = new ImageView((new Image("res/ic_mail_black_18dp.png")));
                     setGraphic(messageReadImageView);
+                    messageReadImageView.setFitHeight(15);
+                    messageReadImageView.setFitWidth(15);
+                    setAlignment(Pos.CENTER);
                 }
             }
         });
