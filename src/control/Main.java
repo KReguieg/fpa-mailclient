@@ -2,27 +2,19 @@ package control;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    private BorderPane root;
-
     @Override
     public void start(Stage primaryStage) throws Exception {
-        root = FXMLLoader.load(getClass().getResource("../view/root.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../view/root.fxml"));
         primaryStage.setTitle("PaperJets");
+        primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.getIcons().add(new Image("res/ic_send_black_48dp.png"));
-        primaryStage.setScene(new Scene(root, 800, 500));
-        AnchorPane treeMenu = FXMLLoader.load(getClass().getResource("../view/nav.fxml"));
-        root.setLeft(treeMenu);
-        SplitPane contentWindow = FXMLLoader.load(getClass().getResource("../view/content.fxml"));
-        root.setRight(contentWindow);
         primaryStage.show();
     }
 

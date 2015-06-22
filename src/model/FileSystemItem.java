@@ -15,4 +15,8 @@ public abstract class FileSystemItem extends TreeItem {
         super(file.getName());
         this.file = file;
     }
+
+    public File getFile() {
+        return file;
+    }
 }
