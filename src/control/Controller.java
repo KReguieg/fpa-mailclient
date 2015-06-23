@@ -5,6 +5,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -130,7 +131,7 @@ public class Controller implements Observer {
     private FolderSelectionObservable observable;
 
     public Controller() {
-        this.rootPath = new File("mes");
+        this.rootPath = new File("src/mes");
         System.out.println(rootPath.getAbsolutePath());
         observable = FolderSelectionObservable.getInstance();
         observable.addObserver(this);
@@ -160,24 +161,24 @@ public class Controller implements Observer {
     }
 
     public void setOnClickListeners() {
-        tableViewId.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Message>() {
-            @Override
-            public void changed(ObservableValue<? extends Message> observable, Message oldValue, Message newValue) {
-                String recipients = "";
-                for (MessageStakeholder recipient : newValue.getRecipients()) {
-                    recipients += recipient.getName() + " <\"" + recipient.getMailAddress() + "\">, ";
-                }
-                recipientsLbl.setText(recipients);
-                fromLbl.setText(newValue.getSender().getName() + " <\"" + newValue.getSender().getMailAddress() + "\">");
-                subjectLbl.setText(newValue.getSubject());
-                dateLbl.setText(DateTimeFormatter.ofPattern("dd.MM.yyyy").format(newValue.getReceivedAt()));
-                mailContentTextArea.setText(newValue.getText());
-                newValue.setReadStatus(true);
-                try {
-                    saveMessage(tableViewId.getSelectionModel().getSelectedItem());
-                } catch (JAXBException e) {
-                    e.printStackTrace();
-                }
+
+        tableViewId.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            String recipients = "";
+            if(newValue == null)
+                return;
+            for (MessageStakeholder recipient : newValue.getRecipients()) {
+                recipients += recipient.getName() + " <\"" + recipient.getMailAddress() + "\">, ";
+            }
+            recipientsLbl.setText(recipients);
+            fromLbl.setText(newValue.getSender().getName() + " <\"" + newValue.getSender().getMailAddress() + "\">");
+            subjectLbl.setText(newValue.getSubject());
+            dateLbl.setText(DateTimeFormatter.ofPattern("dd.MM.yyyy").format(newValue.getReceivedAt()));
+            mailContentTextArea.setText(newValue.getText());
+            newValue.setReadStatus(true);
+            try {
+                saveMessage(tableViewId.getSelectionModel().getSelectedItem());
+            } catch (JAXBException e) {
+                e.printStackTrace();
             }
         });
     }
@@ -191,6 +192,7 @@ public class Controller implements Observer {
                 if (item == null || empty) {
                     setText(null);
                     setStyle("");
+                    setGraphic(null);
                 } else {
                     ImageView priorityIconView = null;
                     if (item == MessageImportance.HIGH) {
@@ -226,6 +228,7 @@ public class Controller implements Observer {
                 if (item == null || empty) {
                     setText(null);
                     setStyle("");
+                    setGraphic(null);
                 } else {
                     ImageView messageReadImageView;
                     if (item) messageReadImageView = new ImageView(new Image("res/ic_drafts_black_18dp.png"));
@@ -248,7 +251,7 @@ public class Controller implements Observer {
      */
     public File[] loadFiles() {
         final String extension = ".xml";
-        final File currentDir = new File(".\\src\\mes");
+        final File currentDir = rootPath;
         return currentDir.listFiles((File pathname) -> pathname.getName().endsWith(extension));
     }
 
@@ -270,7 +273,7 @@ public class Controller implements Observer {
     }
 
     public void saveMessage(Message msg) throws JAXBException{
-        final File currentDir = new File(".\\src\\mes");
+        final File currentDir = rootPath;
         JAXBContext context = JAXBContext.newInstance(Message.class);
         Marshaller m = context.createMarshaller();
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -295,8 +298,10 @@ public class Controller implements Observer {
         rootIcon.setFitWidth(16);
         FileSystemItem treeRoot;
         try {
-            treeRoot = new Folder(this.rootPath);
+            treeRoot = new Folder(this.rootPath, false);
             treeRoot.setExpanded(true);
+            treeRoot.setGraphic(rootIcon);
+            System.out.println(treeRoot.getChildren());
             treeViewId.setRoot(treeRoot);
         } catch (IOException e) {
             e.printStackTrace();
@@ -304,20 +309,24 @@ public class Controller implements Observer {
     }
 
     private void addChangeListenersToTreeView() {
-        treeViewId.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                FileSystemItem selectedItem = (FileSystemItem) newValue;
-                Controller.this.observable.newFolder(selectedItem.getFile());
-            }
+
+        treeViewId.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            Folder selectedItem = (Folder) newValue;
+
+            Controller.this.observable.newFolder(selectedItem.getFile());
         });
     }
 
     @Override
     public void update(Observable o, Object arg) {
         File file = (File) arg;
+        rootPath = file;
+        tableViewId.getItems().clear();
         createExampleMessages();
+
         clearLabels();
+
+        //System.out.println("Update Called: " + rootPath);
     }
 
     private void clearLabels() {

@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 
 /**
@@ -14,39 +15,29 @@ import java.io.IOException;
  */
 public class Folder extends FileSystemItem {
 
-    ObservableList<TreeItem> childList;
+    public Folder(File file, boolean leaf) throws IOException {
+        super(file, leaf);
+    }
 
-    public Folder(File file) throws IOException {
-        super(file);
-        if (!this.file.isDirectory()) {
-            throw new IOException("Path " + this.file.getAbsolutePath() + " is no directory!");
+    @Override
+    public ObservableList<TreeItem> getChildren() {
+        ObservableList<TreeItem> childList = super.getChildren();
+        File[] listFiles = file.listFiles();
+        Folder item;
+        for(File f : listFiles) {
+            if(f.isDirectory() && leaf == false) {
+                try {
+                    item = new Folder(f, leaf);
+                    childList.add(item);
+                    item.getChildren();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        this.childList = FXCollections.observableArrayList();
-        ImageView folderIcon = new ImageView(new Image("src\\res\\ic_folder_black_18dp.png"));
-        folderIcon.setFitHeight(16);
-        folderIcon.setFitWidth(16);
-        this.setGraphic(folderIcon);
-        scanSubFolders();
+        leaf = true;
+        return childList;
     }
-
-    public ObservableList<TreeItem> getChildList() {
-        return this.childList;
-    }
-
-    private void scanSubFolders() throws IOException {
-        this.childList = super.getChildren();
-        File[] folders = this.file.listFiles((dir, name) -> {
-            return new File(dir, name).isDirectory();
-        });
-        for (File folder : folders) {
-            this.addChildren(new Folder(folder));
-        }
-    }
-
-    private void addChildren(FileSystemItem item) {
-        this.childList.add(item);
-    }
-
 
     @Override
     public String toString() {

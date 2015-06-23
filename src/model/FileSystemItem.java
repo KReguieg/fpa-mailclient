@@ -1,6 +1,8 @@
 package model;
 
 import javafx.scene.control.TreeItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.io.File;
 
@@ -10,10 +12,14 @@ import java.io.File;
 public abstract class FileSystemItem extends TreeItem {
 
     protected File file;
+    protected boolean leaf;
 
-    public FileSystemItem(File file) {
+    public FileSystemItem(File file, boolean leaf) {
         super(file.getName());
+        ImageView icon = new ImageView(new Image("res/ic_folder_black_18dp.png"));
         this.file = file;
+        this.leaf = leaf;
+        setGraphic(icon);
     }
 
     public File getFile() {
